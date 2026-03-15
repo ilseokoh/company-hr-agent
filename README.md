@@ -242,3 +242,12 @@ app = App(root_agent=root_agent, name="app")
 
 ## API 호출 Tool 
 
+## Gemini CLI 를 사용할 때 ADK 문서를 사용하는 방법 
+
+### Gemini CLI 사용
+
+```
+export GOOGLE_CLOUD_PROJECT=kevin-ai-playground
+export GOOGLE_CLOUD_LOCATION=asia-northeast3
+gemini
+```
