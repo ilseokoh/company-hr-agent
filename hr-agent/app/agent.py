@@ -6,11 +6,9 @@ from google.adk.agents import Agent
 from google.adk.apps.app import App
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.planners import PlanReActPlanner
-from google.adk.tools.retrieval.vertex_ai_rag_retrieval import (
-    VertexAiRagRetrieval,
-)
+
 from .sub_agents.vacation_agent.agent import vacation_agent
-from vertexai.preview import rag
+from .sub_agents.ask_vertex_agent.agent import ask_vertex_agent
 
 import logging
 import google.cloud.logging
@@ -37,25 +35,10 @@ os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
 
-# IMPORTANT: replace this with your corpus resource name
-os.environ.setdefault(
-    "RAG_CORPUS",
-    f"projects/kevin-ai-playground/locations/asia-northeast3/ragCorpora/5148740273991319552",
-)
-
 # =========================================
 # SPECIALIZED TOOLS
 # =========================================
 
-ask_vertex_retrieval = VertexAiRagRetrieval(
-    name="retrieve_hr_rag",
-    description=(
-        "HR 업무중에서 휴가 규정에 대한 상세한 내용을 검색할 수 있다."
-    ),
-    rag_resources=[rag.RagResource(rag_corpus=os.environ.get("RAG_CORPUS"))],
-    similarity_top_k=10,
-    vector_distance_threshold=0.6,
-)
 
 # --- Root Agent ---
 root_instructions = """
@@ -66,7 +49,7 @@ root_instructions = """
 <INSTRUCTIONS>
 사용 가능한 도구들
 * vacation_agent: 남은 휴가에 대해서 물어보면 vacation_agent 에이전트를 통하여 답변합니다. 
-* retrieve_hr_rag: 일반적인 휴가 규정, 규칙에 대한 문의라면 retrieve_hr_rag 툴을 사용하여 답변합니다. 
+* ask_vertex_agent: 일반적인 휴가 규정, 규칙에 대한 문의라면 ask_vertex_agent 에이전트를 통하여 답변합니다. 
 </INSTRUCTIONS>
 
 <OUTPUT_FORMAT>
@@ -81,7 +64,7 @@ root_agent = Agent(
     model="gemini-2.5-flash",
     planner=PlanReActPlanner(),
     instruction=root_instructions,
-    tools=[AgentTool(vacation_agent), ask_vertex_retrieval],
+    tools=[AgentTool(vacation_agent), AgentTool(ask_vertex_agent)],
 )
 
 app = App(root_agent=root_agent, name="app")
