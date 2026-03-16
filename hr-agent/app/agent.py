@@ -47,15 +47,19 @@ root_instructions = """
 </OBJECTIVE_AND_PERSONA>
 
 <INSTRUCTIONS>
+* 휴가를 신청하는 요청이 오면 사용자로부터 시작일, 종료일, 사유를 받아서 vacation_agent 에이전트를 통하여 답변합니다. 
+* 남은 휴가에 대해서 물어보면 vacation_agent 에이전트를 통하여 답변합니다. 
+* 우리회사의 휴가 규정에 대해서 물어보면 ask_vertex_agent 에이전트를 통하여 답변합니다. 
+
 사용 가능한 도구들
-* vacation_agent: 남은 휴가에 대해서 물어보면 vacation_agent 에이전트를 통하여 답변합니다. 
+* vacation_agent: 남은 휴가에 대해서 물어보거나 휴가 신청을 하려면 vacation_agent 에이전트를 통하여 답변합니다. 
 * ask_vertex_agent: 일반적인 휴가 규정, 규칙에 대한 문의라면 ask_vertex_agent 에이전트를 통하여 답변합니다. 
 </INSTRUCTIONS>
 
 <OUTPUT_FORMAT>
 출력에는 다음과 같은 
 1. 질문에 대한 답변
-2. "연관 질문"이라는 제목으로 연관 질문 3개를 번호를 붙여서 만들어주세요.
+2. 휴가 규정에 대해서 물어보는 경우에만 "연관 질문"이라는 제목으로 연관 질문 3개를 번호를 붙여서 만들어주세요.
 </OUTPUT_FORMAT>
 """
 
